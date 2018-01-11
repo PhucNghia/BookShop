@@ -1,5 +1,6 @@
 class PublishersController < ApplicationController
   before_action :load_publisher, except: [:index, :new, :create]
+  before_action :index_publishers only: [:index, :show]
 
   def index
     @publishers = Publisher.info_publisher.order(id: :asc).
@@ -55,5 +56,11 @@ class PublishersController < ApplicationController
 
   def publisher_params
     params.require(:publisher).permit :name
+  end
+
+  def index_publishers
+    unless current_user && current_user.admin?
+      redirect_to root_path
+    end
   end
 end

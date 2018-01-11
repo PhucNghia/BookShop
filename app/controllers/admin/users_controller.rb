@@ -1,7 +1,7 @@
 class Admin::UsersController < ApplicationController
 
   before_action :load_user, except: [:index, :new, :create]
-  before_action :user_admin
+  before_action :user_admin, only: [:index]
 
   def index
     @q = User.ransack params[:q]
@@ -27,14 +27,11 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-
-  def edit
-    @user = User.find_by_id params[:id]
-  end
+  def edit; end
 
   def update
     if @user.update_attributes user_params
-      flash[:success] = "cap nhat thanh cong"
+      flash[:success] = t "controller.users_controller.success_update"
       redirect_to admin_users_path
     else
       render :edit
